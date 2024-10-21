@@ -1,33 +1,27 @@
-<%-
-  groups = OodSupport::User.new.groups.sort_by(&:id).tap { |groups|
-    groups.unshift(groups.delete(OodSupport::Process.group))
-  }.map(&:name).grep(/^P./)
--%>
 ---
-cluster: "pitzer"
+title: VSCode
+description: |
+  This app will launch an interactive VSCode development environment on ARCC2
+cluster: "arcc2"
 form:
-  - account
   - bc_num_hours
   - working_dir
-  - version
 attributes:
-  account:
-    label: "Project"
-    widget: select
-    options:
-      <%- groups.each do |group| %>
-      - "<%= group %>"
-    <%- end %>
-  version:
-    widget: "select"
-    label: "Codeserver Version"
-    options:
-      - ["4.8", "4.8.3"]
-      - ["3.9", "3.9.3"]
-
+  bc_num_hours:
+    label: Walltime (Hours)
+    help: |
+      - Allocate up to 48 hours
+      - Exceeding walltime time will automatically stop this job
+    cacheable: false
+    widget: number_field
+    max: 48
+    min: 1
+    step: 1
+    value: 1
   working_dir:
     widget: "path_selector"
     label: "Working Directory"
     data-target-file-type: dirs  # Valid values are: files, dirs, or both
     readonly: false
-    help: "Select your project directory; defaults to $HOME"
+    help: |
+       - Select your project directory; defaults to $HOME
